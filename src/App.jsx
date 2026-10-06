@@ -4,7 +4,7 @@ import { RegisterPage } from "./pages/RegisterPage.jsx";
 export const App = () => {
   return (
     <div>
-      <LoginPage></LoginPage>
+      <RegisterPage></RegisterPage>
     </div>
   );
 };

@@ -1,23 +1,11 @@
 import { useState } from "react";
+import { useForm } from "../hooks/useForm.js";
 
 export const LoginPage = () => {
-  const [form, setForm] = useState({
+  const { handleChange, handleSubmit } = useForm({
     email: "",
     password: "",
   });
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(form);
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
 
   return (
     <main className="flex justify-center min-h-screen items-center bg-gradient-to-b from-gray-900 to-red-600 ">
@@ -28,7 +16,7 @@ export const LoginPage = () => {
         <h1 className=" tite font-bold border-b-2 border-gray-200 mb-4 text-gray-600">
           Iniciar Sesión
         </h1>
-        <form action="" method="post">
+        <form>
           <div>
             <label
               htmlFor="email"
