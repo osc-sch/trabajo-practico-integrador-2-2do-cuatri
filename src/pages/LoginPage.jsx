@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useForm } from "../hooks/useForm.js";
+import { Link } from "react-router-dom";
 
 export const LoginPage = () => {
   const { handleChange, handleSubmit } = useForm({
@@ -55,9 +55,12 @@ export const LoginPage = () => {
             <div className="flex justify-center mt-4">
               <p>
                 No tienes una cuenta?{" "}
-                <a href="" className=" text-red-600 font-bold underline">
+                <Link
+                  to="/register"
+                  className=" text-red-600 font-bold underline"
+                >
                   Registrarse
-                </a>
+                </Link>
               </p>
             </div>
           </div>
