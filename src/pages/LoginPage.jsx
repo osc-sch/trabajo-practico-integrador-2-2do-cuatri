@@ -27,6 +27,7 @@ export const LoginPage = () => {
       });
 
       if (response.ok) {
+        localStorage.setItem("isLogeed", true);
         navigate("/home");
       }
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export const useFecht = (url) => {
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoaded] = useState(true);
   const [error, setError] = useState(null);
 
   const getData = async () => {
