@@ -1,20 +1,20 @@
 import { useState } from "react";
 
-export const useForm = (iniform) => {
-    const [form, setForm] = useState(iniform)
-    
-    const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(form);
-  };
+export const useForm = (initialForm) => {
 
-  const handleChange = (event) => {
+  const [form, setForm] = useState(initialForm);
+
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     setForm({
       ...form,
       [name]: value,
     });
-    };
-    
-    return{ handleChange,handleSubmit}
-}
+  };
+
+  const handleReset = () => {
+    setForm(initialForm);
+  };
+
+  return { handleInputChange, form, handleReset };
+};

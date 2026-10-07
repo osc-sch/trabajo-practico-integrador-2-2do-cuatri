@@ -1,15 +1,72 @@
+import { useState } from "react";
 import { useForm } from "../hooks/useForm.js";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const RegisterPage = () => {
-  const { handleChange, handleSubmit } = useForm({
-    name: "",
-    lastname: "",
+  const navigation = useNavigate();
+
+  const { form, handleInputChange, handleReset } = useForm({
+    first_name: "",
+    last_name: "",
+    username: "",
     email: "",
     password: "",
   });
+
+  const comparePassword = () => {
+    const verifiPassword = document.querySelector("#verify-password").value;
+    if (verifiPassword === form.password) {
+      return true;
+    }
+
+    setErrors([{ msg: "las contraseñas no coinciden" }]);
+
+    return false;
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errors, setErrors] = useState([]);
+
+  const handleSubmit = async (event) => {
+    setErrors([]);
+    event.preventDefault();
+
+    if (!comparePassword()) {
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3001/api/register", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        handleReset();
+        navigation("/login");
+      }
+
+      const result = await response.json();
+
+      setErrors(result.errors);
+    } catch (error) {
+      console.log("esta mal");
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
+    return;
+  };
+
   return (
-    <main className="flex justify-center min-h-screen items-center bg-gradient-to-b from-gray-900 to-red-600 ">
+    <main className="flex justify-center min-h-screen items-center bg-gradient-to-br from-yellow-300 to-orange-600 ">
       <div
         style={{ width: "500px" }}
         className=" shadow-xl bg-white p-6 rounded-lg"
@@ -29,8 +86,9 @@ export const RegisterPage = () => {
               <input
                 type="text"
                 id="nombre"
-                name="name"
-                onChange={handleChange}
+                name="first_name"
+                value={form.first_name}
+                onChange={handleInputChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors"
               />
             </div>
@@ -44,14 +102,30 @@ export const RegisterPage = () => {
               <input
                 type="text"
                 id="apellido"
-                name="lastname"
-                onChange={handleChange}
+                name="last_name"
+                value={form.last_name}
+                onChange={handleInputChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors "
               />
             </div>
           </div>
 
           <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-500 mb-2 "
+            >
+              Nombre de usuario
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={form.username}
+              onChange={handleInputChange}
+              className=" w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors mb-4"
+            />
+
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-500 mb-2 "
@@ -62,7 +136,8 @@ export const RegisterPage = () => {
               type="email"
               id="email"
               name="email"
-              onChange={handleChange}
+              value={form.email}
+              onChange={handleInputChange}
               className=" w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors mb-4"
             />
 
@@ -76,7 +151,8 @@ export const RegisterPage = () => {
               type="password"
               id="password"
               name="password"
-              onChange={handleChange}
+              value={form.password}
+              onChange={handleInputChange}
               className=" w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors mb-2"
             />
 
@@ -91,17 +167,24 @@ export const RegisterPage = () => {
               id="verify-password"
               className=" w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition-colors mb-2"
             />
+            <div>
+              {errors.map((error) => (
+                <p className="border-b border-red-500  p-2  m-2 text-red-700 font-medium">
+                  {error.msg}
+                </p>
+              ))}
+            </div>
 
             <input
               type="submit"
-              value="Registrarse"
+              value={isLoading ? "Enviando..." : "Registrase"}
               onClick={handleSubmit}
-              className=" w-full block text-gray-700 font-bold bg-red-400  px-2 py-2 rounded-sm hover:bg-red-500 hover:text-gray-800 transition-colors cursor-pointer "
+              className=" w-full block text-gray-700 font-bold bg-gray-300  px-2 py-2 rounded-sm hover:bg-gradient-to-br from-yellow-300 to-orange-600 hover:text-gray-800 transition-all cursor-pointer "
             />
             <div className="flex justify-center mt-4">
               <p>
                 Ya tienese una Cuenta?{" "}
-                <Link to="/login" className=" text-red-600 font-bold underline">
+                <Link to="/login" className=" text-red-500 font-bold underline">
                   Iniciar Sesión
                 </Link>
               </p>

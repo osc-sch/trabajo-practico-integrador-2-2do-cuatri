@@ -1,4 +1,10 @@
+import { useFecht } from "../hooks/useFecht.js";
+
 export const Navbar = () => {
+  const { data, isLoading, error } = useFecht(
+    "http://localhost:3001/api/logout",
+  );
+  console.log(data);
   return (
     <nav className="w-full bg-gray-800 p-2 shadow-lg flex justify-between ">
       <h1 className="text-white font-bold text-xl underline">TuBlog</h1>
